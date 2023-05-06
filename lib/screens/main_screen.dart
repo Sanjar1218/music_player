@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '/style/color.dart';
 import '/functions/main_music.dart';
 import 'constant.dart';
-import 'constant.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -81,28 +80,28 @@ class _MainPageState extends State<MainPage> {
                           });
                         },
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      //   children: [
-                      //     Image.asset('images/sardor.png', scale: 7),
-                      //     Column(
-                      //       children: const [
-                      //         Text(sardor, style: TextStyle(fontSize: 20)),
-                      //         Text(
-                      //           sardor_music,
-                      //           style: TextStyle(
-                      //             fontSize: 20,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.grey,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //     const Icon(Icons.skip_previous_outlined, size: 35),
-                      //     const Icon(Icons.pause, size: 35),
-                      //     const Icon(Icons.skip_next_outlined, size: 35),
-                      //   ],
-                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Image.asset('images/sardor.png', scale: 7),
+                          Column(
+                            children: const [
+                              Text(sardor, style: TextStyle(fontSize: 20)),
+                              Text(
+                                sardor_music,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Icon(Icons.skip_previous_outlined, size: 35),
+                          const Icon(Icons.pause, size: 35),
+                          const Icon(Icons.skip_next_outlined, size: 35),
+                        ],
+                      ),
                     ],
                   ),
                 ),
