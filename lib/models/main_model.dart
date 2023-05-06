@@ -1,15 +1,6 @@
-class SongModel {
-  int id = 123;
-  String musicName = 'asdf';
-  String artist = 'asdf';
-  String imgPath = 'asdf';
-  String musicPath = 'asdf';
+class Music {
+  final String music_author;
+  final String music_title;
 
-  SongModel({id, musicName, artist, imgPath, musicPath}) {
-    id = id;
-    musicName = musicName;
-    artist = artist;
-    imgPath = imgPath;
-    musicPath = musicPath;
-  }
+  Music({required this.music_author, required this.music_title});
 }
