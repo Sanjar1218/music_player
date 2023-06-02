@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../functions/main_music.dart';
+import 'constant.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
   @override

@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/data/data.dart';
-import 'package:music_player/models/main_model.dart';
-import 'package:music_player/screens/my_playlist_screens.dart';
-
-import 'package:music_player/screens/recommended_screens.dart';
-import 'package:music_player/screens/songs.dart';
-import 'package:music_player/widgets/drawer.dart';
-import 'package:music_player/widgets/player.dart';
 
 void main() {
   runApp(
-    MaterialApp(
+    const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyApp(),
+      home: MainRoute(),
     ),
   );
 }
