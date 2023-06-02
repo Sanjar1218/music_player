@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../data/data.dart';
 import '../widgets/music_item.dart';
@@ -34,7 +31,7 @@ class _SongsState extends State<Songs> {
                     ),
                   ));
             },
-            child: Text(
+            child: const Text(
               "Songs",
               style: TextStyle(
                   fontSize: 30,
@@ -43,7 +40,7 @@ class _SongsState extends State<Songs> {
             ),
           ),
         ),
-        Container(
+        SizedBox(
           height: 210,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,

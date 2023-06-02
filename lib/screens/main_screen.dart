@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import '/style/color.dart';
-import '/functions/main_music.dart';
-import 'constant.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

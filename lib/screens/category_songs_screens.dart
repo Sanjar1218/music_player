@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:music_player/data/data.dart';
 import 'package:music_player/widgets/music_item.dart';
 
 import '../models/main_model.dart';
