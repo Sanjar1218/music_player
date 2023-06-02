@@ -24,86 +24,109 @@ class _MainPageState extends State<MainPage> {
               color: black,
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                // const SizedBox(height: 20),
-                const Text(recommended, style: TextStyle(fontSize: 23)),
-                const SizedBox(height: 20),
-                Expanded(
-                  flex: 4,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: imageLIst.length,
-                    itemBuilder: (context, index) {
-                      return mainFunction(
-                        imageLIst[index]['artist'],
-                        imageLIst[index]['artist'],
-                        imageLIst[index]['image_path'],
-                        size: 160,
-                      );
-                    },
+          body: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: const [
+                  Text(
+                    recommended,
+                    style: TextStyle(fontSize: 23),
                   ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                flex: 4,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    mainFunction(osman_music, osman, 'images/osman.png',
+                        size: 160),
+                    mainFunction(sami_music, sami, 'images/sami_yusuf.png',
+                        size: 160),
+                    mainFunction(
+                        bunyodbek_music, bunyodbek, 'images/bunyodbek.png',
+                        size: 160),
+                    mainFunction(sardor_music, sardor, 'images/sardor.png',
+                        size: 160),
+                  ],
                 ),
-
-                const Text(recommended, style: TextStyle(fontSize: 23)),
-                // Expanded(
-                //   flex: 4,
-                //   child: ListView(
-                //     scrollDirection: Axis.horizontal,
-                //     children: [
-                //       mainFunction(rauf_music, rauf_faik, 'images/rauf_faik.png', size: 160),
-                //       mainFunction(yusuf_music, yusuf, 'images/yusuf.png', size: 160),
-                //       mainFunction(ozodbek_music, ozodbek, 'images/ozodbek.png', size: 160),
-                //       mainFunction(bahrom_music, bahrom, 'images/bahrom.png', size: 160),
-                //     ],
-                //   ),
-                // ),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      Slider(
-                        autofocus: true,
-                        activeColor: black,
-                        value: rating,
-                        max: 100,
-                        divisions: 100,
-                        label: rating.round().toString(),
-                        onChanged: (double value) {
-                          setState(() {
-                            rating = value;
-                          });
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Image.asset('images/sardor.png', scale: 7),
-                          Column(
-                            children: const [
-                              Text(sardor, style: TextStyle(fontSize: 20)),
-                              Text(
-                                sardor_music,
-                                style: TextStyle(
+              ),
+              Expanded(
+                flex: 4,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    mainFunction(rauf_music, rauf_faik, 'images/rauf_faik.png',
+                        size: 160),
+                    mainFunction(yusuf_music, yusuf, 'images/yusuf.png',
+                        size: 160),
+                    mainFunction(ozodbek_music, ozodbek, 'images/ozodbek.png',
+                        size: 160),
+                    mainFunction(bahrom_music, bahrom, 'images/bahrom.png',
+                        size: 160),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    Slider(
+                      autofocus: true,
+                      activeColor: black,
+                      value: rating,
+                      max: 100,
+                      divisions: 100,
+                      label: rating.round().toString(),
+                      onChanged: (double value) {
+                        setState(() {
+                          rating = value;
+                        });
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Image.asset('images/sardor.png', scale: 7),
+                        Column(
+                          children: const [
+                            Text(
+                              sardor,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              sardor_music,
+                              style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Icon(Icons.skip_previous_outlined, size: 35),
-                          const Icon(Icons.pause, size: 35),
-                          const Icon(Icons.skip_next_outlined, size: 35),
-                        ],
-                      ),
-                    ],
-                  ),
+                                  color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          Icons.skip_previous_outlined,
+                          size: 35
+                        ),
+                        Icon(
+                          Icons.pause,
+                          size: 35,
+                        ),
+                        Icon(
+                          Icons.skip_next_outlined,
+                          size: 35,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           )),
     );
   }

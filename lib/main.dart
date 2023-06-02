@@ -16,67 +16,19 @@ void main() {
     ),
   );
 }
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MainRoute extends StatelessWidget {
+  const MainRoute({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
-      body: HomePage(),
-      drawer: Drawer(
-        child: DrawerPage(),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  Music ms = musicList[0];
-  func(Music music) {
-    setState(() {
-      ms = music;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.77,
-          child: ListView(
-            children: [
-              RecommendedScreen(func: func),
-              MyPlaylistScreens(func: func),
-              Songs(func: func),
-            ],
-          ),
-        ),
-        Player(
-          music: ms,
-        )
-      ],
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: theme,
+      initialRoute: '/playing',
+      routes: {
+        'mmm': (context) => const MainPage(),
+        '/playlist': (context) => const PlaylistPage(),
+        '/playing': (context) => const PlayingPage(),
+      },
     );
   }
 }
