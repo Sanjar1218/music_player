@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/screens/playing_page.dart';
+import 'package:music_player/screens/playlist_page.dart';
 
 import 'screens/home_page.dart';
 
@@ -14,11 +16,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
       ),
       routes: {
         '/': (context) => const HomePage(),
+        '/playlist': (context) => const PlaylistPage(),
+        '/playing': (context) => const PlayingPage(),
       },
     );
   }
