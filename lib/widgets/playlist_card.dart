@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
 class PlaylistCard extends StatelessWidget {
+  final String imgPath;
+  final VoidCallback? onTap;
+
   const PlaylistCard({
     super.key,
+    required this.imgPath,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, '/playlist');
-      },
+      onTap: onTap,
       child: Column(
         children: [
           Container(
@@ -27,7 +30,7 @@ class PlaylistCard extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset('assets/images/Covers.png'),
+              child: Image.asset(imgPath),
             ),
           ),
           const SizedBox(height: 8),
