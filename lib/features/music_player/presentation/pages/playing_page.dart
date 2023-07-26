@@ -11,6 +11,10 @@ class PlayingPage extends StatefulWidget {
 
 class _PlayingPageState extends State<PlayingPage> {
   final assetsAudioPlayer = AssetsAudioPlayer();
+  final CarouselController carouselController = CarouselController();
+
+  String artist = 'IMAGINE DRAGON';
+  String song = 'Believer';
 
   int second = 0;
   double range = 0;
@@ -21,22 +25,51 @@ class _PlayingPageState extends State<PlayingPage> {
 
   @override
   void initState() {
-    assetsAudioPlayer
-        .open(
-      Audio("assets/audios/summer.mp3"),
+    assetsAudioPlayer.open(
+      Playlist(audios: [
+        Audio("assets/audios/summer.mp3"),
+        Audio("assets/audios/gone.mp3"),
+      ]),
       autoStart: false,
-    )
-        .then((value) {
+    );
+
+    assetsAudioPlayer.currentPosition.listen(
+      (event) {
+        if (event.inSeconds == second) return;
+        setState(() {
+          range = event.inSeconds.toDouble();
+          time = ('${event.inMinutes.toString().padLeft(2, '0')}:${(event.inSeconds % 60).toString().padLeft(2, '0')}');
+        });
+        second = event.inSeconds;
+      },
+      onDone: () {
+        print('done');
+        setState(() {
+          range = 0;
+          time = '--:--';
+        });
+      },
+    );
+    assetsAudioPlayer.playlistFinished.listen((event) {
+      print('finished $event');
+      if (event) {
+        setState(() {
+          range = 0;
+          isPlaying = false;
+          time = '00:00';
+        });
+      }
+    });
+    assetsAudioPlayer.current.listen((event) {
+      print('current $event');
+
       lastTime = ('${assetsAudioPlayer.current.value?.audio.duration.inMinutes.toString().padLeft(2, '0')}:${(assetsAudioPlayer.current.value!.audio.duration.inSeconds % 60).toString().padLeft(2, '0')}');
       wholeRange = assetsAudioPlayer.current.value!.audio.duration.inSeconds.toDouble();
-    });
-    assetsAudioPlayer.currentPosition.listen((event) {
-      if (event.inSeconds == second) return;
+      
       setState(() {
-        range = event.inSeconds.toDouble();
-        time = ('${event.inMinutes.toString().padLeft(2, '0')}:${(event.inSeconds % 60).toString().padLeft(2, '0')}');
+        song = event!.audio.assetAudioPath.split('/')[2];
+        // song = event.audio.assetAudioPath.;
       });
-      second = event.inSeconds;
     });
     super.initState();
   }
@@ -59,6 +92,7 @@ class _PlayingPageState extends State<PlayingPage> {
         children: [
           const SizedBox(height: 30),
           CarouselSlider(
+            carouselController: carouselController,
             options: CarouselOptions(height: 260.0, aspectRatio: 14 / 16, viewportFraction: 0.75, clipBehavior: Clip.none),
             items: [1, 2, 3, 4, 5].map((i) {
               return Builder(
@@ -69,13 +103,13 @@ class _PlayingPageState extends State<PlayingPage> {
                     alignment: Alignment.bottomCenter,
                     children: [
                       Positioned(child: Image.asset('assets/images/Covers.png', width: 100, height: 100, scale: 0.5)),
-                      const Positioned(
+                      Positioned(
                         bottom: -70,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('Believer', textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF081027), fontSize: 24, fontWeight: FontWeight.w700)),
-                            Text('IMAGINE DRAGON', textAlign: TextAlign.center, style: TextStyle(color: Color(0xFF8995B8), fontSize: 16, fontWeight: FontWeight.w400)),
+                            Text(song, textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 24, fontWeight: FontWeight.w700)),
+                            Text(artist, textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF8995B8), fontSize: 16, fontWeight: FontWeight.w400)),
                           ],
                         ),
                       ),
@@ -123,7 +157,6 @@ class _PlayingPageState extends State<PlayingPage> {
           ),
           Slider(
             value: range,
-            min: 0,
             max: wholeRange,
             activeColor: Colors.black,
             inactiveColor: Colors.grey,
@@ -140,17 +173,31 @@ class _PlayingPageState extends State<PlayingPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(onTap: () {}, child: const Icon(Icons.skip_previous_outlined, size: 60)),
+              InkWell(
+                  onTap: () {
+                    assetsAudioPlayer.previous();
+                    carouselController.previousPage();
+                    print('previous');
+                  },
+                  child: const Icon(Icons.skip_previous_outlined, size: 60)),
               InkWell(
                   onTap: () {
                     assetsAudioPlayer.playOrPause();
+                    
+                    print('play or pause');
                     setState(() {
                       isPlaying = !isPlaying;
                     });
                   },
                   // ignore: dead_code
                   child: isPlaying ? const Icon(Icons.pause_outlined, size: 60) : const Icon(Icons.play_arrow_outlined, size: 60)),
-              const Icon(Icons.skip_next_outlined, size: 60),
+              InkWell(
+                  onTap: () {
+                    assetsAudioPlayer.next();
+                    print('next');
+                    carouselController.nextPage();
+                  },
+                  child: const Icon(Icons.skip_next_outlined, size: 60)),
             ],
           )
         ],
