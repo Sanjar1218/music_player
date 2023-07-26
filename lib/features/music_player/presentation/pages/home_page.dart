@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/screens/settings_page.dart';
 
 import '../widgets/list_card.dart';
+import 'settings_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
