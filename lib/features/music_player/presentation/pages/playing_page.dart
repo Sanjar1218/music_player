@@ -1,8 +1,51 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class PlayingPage extends StatelessWidget {
+class PlayingPage extends StatefulWidget {
   const PlayingPage({super.key});
+
+  @override
+  State<PlayingPage> createState() => _PlayingPageState();
+}
+
+class _PlayingPageState extends State<PlayingPage> {
+  final assetsAudioPlayer = AssetsAudioPlayer();
+
+  int second = 0;
+  double range = 0;
+  double wholeRange = 0;
+  bool isPlaying = false;
+  String time = '--:--';
+  String lastTime = '--:--';
+
+  @override
+  void initState() {
+    assetsAudioPlayer
+        .open(
+      Audio("assets/audios/summer.mp3"),
+      autoStart: false,
+    )
+        .then((value) {
+      lastTime = ('${assetsAudioPlayer.current.value?.audio.duration.inMinutes.toString().padLeft(2, '0')}:${(assetsAudioPlayer.current.value!.audio.duration.inSeconds % 60).toString().padLeft(2, '0')}');
+      wholeRange = assetsAudioPlayer.current.value!.audio.duration.inSeconds.toDouble();
+    });
+    assetsAudioPlayer.currentPosition.listen((event) {
+      if (event.inSeconds == second) return;
+      setState(() {
+        range = event.inSeconds.toDouble();
+        time = ('${event.inMinutes.toString().padLeft(2, '0')}:${(event.inSeconds % 60).toString().padLeft(2, '0')}');
+      });
+      second = event.inSeconds;
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    assetsAudioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,32 +111,46 @@ class PlayingPage extends StatelessWidget {
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('00:45'),
-                Text('04:00'),
+                Text(time),
+                Text(lastTime),
               ],
             ),
           ),
           Slider(
-            value: 0.5,
+            value: range,
+            min: 0,
+            max: wholeRange,
             activeColor: Colors.black,
             inactiveColor: Colors.grey,
             thumbColor: Colors.black,
             overlayColor: const MaterialStatePropertyAll(Colors.transparent),
-            onChanged: (value) {},
+            onChanged: (value) {
+              setState(() {
+                range = value;
+              });
+              assetsAudioPlayer.seek(Duration(seconds: value.toInt()));
+            },
           ),
           const SizedBox(height: 20),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.skip_previous_outlined, size: 60),
-              // ignore: dead_code
-              true ? Icon(Icons.pause_outlined, size: 60) : Icon(Icons.play_arrow),
-              Icon(Icons.skip_next_outlined, size: 60),
+              InkWell(onTap: () {}, child: const Icon(Icons.skip_previous_outlined, size: 60)),
+              InkWell(
+                  onTap: () {
+                    assetsAudioPlayer.playOrPause();
+                    setState(() {
+                      isPlaying = !isPlaying;
+                    });
+                  },
+                  // ignore: dead_code
+                  child: isPlaying ? const Icon(Icons.pause_outlined, size: 60) : const Icon(Icons.play_arrow_outlined, size: 60)),
+              const Icon(Icons.skip_next_outlined, size: 60),
             ],
           )
         ],
