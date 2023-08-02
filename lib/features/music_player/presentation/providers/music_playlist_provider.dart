@@ -1,5 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:music_player/features/music_player/data/models/playlist_model.dart';
 import 'package:music_player/features/music_player/data/repositories/music_repositories.dart';
 
 class MusicPlaylistProvider with ChangeNotifier {
@@ -7,7 +9,7 @@ class MusicPlaylistProvider with ChangeNotifier {
 
   MusicPlaylistProvider({required this.musicRepository});
 
-  List<String> playlist = [];
+  List<PlaylistModel> playlist = [];
   List<Audio> musics = [];
 
   // get musics from playlist
@@ -22,9 +24,17 @@ class MusicPlaylistProvider with ChangeNotifier {
   }
 
   // add playlist
-  void addPlaylist(String playlistName) async {
-    await musicRepository.addPlaylist(playlistName);
+  void addPlaylist(String playlistName, PlaylistModel playlistModel) async {
+    await musicRepository.addPlaylist(playlistName, playlistModel);
     notifyListeners();
+  }
+
+  void addList() {
+    FilePicker.platform.getDirectoryPath().then((value) {
+      String value2 = value ?? '';
+      playlist.add(PlaylistModel(title: value2.split('/').last, path: value2));
+      notifyListeners();
+    });
   }
 
   // add musics to playlist

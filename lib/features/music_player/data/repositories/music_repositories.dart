@@ -1,4 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:music_player/features/music_player/data/models/playlist_model.dart';
 
 import '../datasources/music_local_datasource.dart';
 
@@ -19,12 +20,12 @@ class MusicRepository {
     await musicLocalDatasource.addMusics(playlistName, musics);
   }
 
-  Future<List<String>> getPlaylists() async {
+  Future<List<PlaylistModel>> getPlaylists() async {
     return await musicLocalDatasource.getPlaylists();
   }
 
-  Future<void> addPlaylist(String playlistName) async {
-    await musicLocalDatasource.addPlaylist(playlistName);
+  Future<void> addPlaylist(String playlistName, PlaylistModel playlistModel) async {
+    await musicLocalDatasource.addPlaylist(playlistName, playlistModel);
   }
 
   Future<void> deletePlaylist(String playlistName) async {
