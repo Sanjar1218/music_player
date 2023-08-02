@@ -5,12 +5,10 @@ import 'playlist_card.dart';
 class ListCards extends StatelessWidget {
   final String title;
   final List<PlaylistCard> children;
-  final VoidCallback? onTap;
 
   const ListCards({
     super.key,
     required this.title,
-    this.onTap,
     required this.children,
   });
 

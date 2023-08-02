@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:music_player/core/utils/get_files.dart';
 import 'package:music_player/features/music_player/data/models/playlist_model.dart';
 import 'package:music_player/features/music_player/data/repositories/music_repositories.dart';
 
@@ -13,18 +14,20 @@ class MusicPlaylistProvider with ChangeNotifier {
   List<Audio> musics = [];
 
   // get musics from playlist
-  void getMusics(String playlistName) async {
-    musics = await musicRepository.getMusics(playlistName) ?? [];
+  Future<void> getMusics(String path) async {
+    print(path);
+    musics = await getFiles(path);
+    print(musics);
     notifyListeners();
   }
 
-  void getPlaylist() async {
+  Future<void> getPlaylist() async {
     playlist = await musicRepository.getPlaylists();
     notifyListeners();
   }
 
   // add playlist
-  void addPlaylist(String playlistName, String path ) async {
+  Future<void> addPlaylist(String playlistName, String path) async {
     await musicRepository.addPlaylist(playlistName, path);
     notifyListeners();
   }
@@ -32,7 +35,7 @@ class MusicPlaylistProvider with ChangeNotifier {
   void addList() {
     FilePicker.platform.getDirectoryPath().then((value) {
       String value2 = value ?? '';
-      String name =value2.split('/').last;
+      String name = value2.split('/').last;
       playlist.add(PlaylistModel(title: name, path: value2));
       musicRepository.addPlaylist(name, value2);
       notifyListeners();
@@ -40,7 +43,7 @@ class MusicPlaylistProvider with ChangeNotifier {
   }
 
   // add musics to playlist
-  void addMusicToPlaylist(String playlistName, List<Audio> musics) async {
+  Future<void> addMusicToPlaylist(String playlistName, List<Audio> musics) async {
     await musicRepository.addMusics(playlistName, musics);
     notifyListeners();
   }

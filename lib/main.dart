@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import 'features/music_player/presentation/pages/home_page.dart';
 import 'features/music_player/presentation/pages/playing_page.dart';
-import 'features/music_player/presentation/pages/playlist_page.dart';
 import 'features/music_player/presentation/providers/music_playlist_provider.dart';
 import 'injection_container.dart';
 
@@ -37,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/': (context) => const HomePage(),
-          '/playlist': (context) => const PlaylistPage(),
+          // '/playlist': (context) => const PlaylistPage(),
           '/playing': (context) => const PlayingPage(),
         },
       ),

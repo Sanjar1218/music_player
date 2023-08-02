@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/music_playlist_provider.dart';
 import '../widgets/list_card.dart';
 import '../widgets/playlist_card.dart';
+import 'playlist_page.dart';
 import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,16 +33,20 @@ class _HomePageState extends State<HomePage> {
           ),
           body: ListCards(
             title: 'Your Playlists',
-            onTap: () {
-              Navigator.pushNamed(context, '/playlist');
-            },
             children: watch.playlist
                 .map(
                   (e) => PlaylistCard(
                     title: e.title,
                     imgPath: Image.asset('assets/images/Shortwave.png'),
                     onTap: () {
-                      Navigator.pushNamed(context, '/playlist', arguments: {'path': e.path});
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return PlaylistPage(model: e);
+                          },
+                        ),
+                      );
                     },
                   ),
                 )
