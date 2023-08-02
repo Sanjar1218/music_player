@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:music_player/features/music_player/data/models/music_model.dart';
 import 'package:music_player/features/music_player/data/models/playlist_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/music_model.dart';
 
 class MusicLocalDatasource {
   final SharedPreferences sharedPreferences;
@@ -39,12 +40,15 @@ class MusicLocalDatasource {
   Future<List<PlaylistModel>> getPlaylists() async {
     print('getting playlist');
     final playlists = sharedPreferences.getKeys();
-    return playlists.map((e) => PlaylistModel.fromJson(jsonDecode(e))).toList();
+    print('playlist $playlists');
+    return playlists.map((e) => PlaylistModel(title: e, path: sharedPreferences.getString(e) ?? '')).toList();
   }
 
   // add playlist
-  Future<void> addPlaylist(String playlistName, PlaylistModel playlistModel) async {
-    await sharedPreferences.setString(playlistName, jsonEncode(playlistModel.toJson()));
+  Future<void> addPlaylist(String playlistName, String path) async {
+    await sharedPreferences.setString(playlistName, path);
+    print('get key');
+    print(sharedPreferences.getKeys());
   }
 
   // delete playlist

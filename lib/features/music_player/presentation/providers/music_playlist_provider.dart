@@ -24,15 +24,17 @@ class MusicPlaylistProvider with ChangeNotifier {
   }
 
   // add playlist
-  void addPlaylist(String playlistName, PlaylistModel playlistModel) async {
-    await musicRepository.addPlaylist(playlistName, playlistModel);
+  void addPlaylist(String playlistName, String path ) async {
+    await musicRepository.addPlaylist(playlistName, path);
     notifyListeners();
   }
 
   void addList() {
     FilePicker.platform.getDirectoryPath().then((value) {
       String value2 = value ?? '';
-      playlist.add(PlaylistModel(title: value2.split('/').last, path: value2));
+      String name =value2.split('/').last;
+      playlist.add(PlaylistModel(title: name, path: value2));
+      musicRepository.addPlaylist(name, value2);
       notifyListeners();
     });
   }
