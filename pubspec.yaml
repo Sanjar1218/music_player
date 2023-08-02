@@ -43,6 +43,7 @@ dependencies:
   permission_handler: ^10.4.3
   flutter_media_metadata: ^1.0.0+1
   collection: ^1.17.1
+  get_it: ^7.6.0
 
 dev_dependencies:
   flutter_test:
