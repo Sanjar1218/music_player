@@ -8,13 +8,11 @@ class CarouselCustom extends StatelessWidget {
     required this.carouselController,
     required this.assetsAudioPlayer,
     required this.audios,
-    required this.artist,
   });
 
   final CarouselController carouselController;
   final AssetsAudioPlayer assetsAudioPlayer;
   final List<Audio>? audios;
-  final String artist;
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +35,17 @@ class CarouselCustom extends StatelessWidget {
               clipBehavior: Clip.none,
               alignment: Alignment.bottomCenter,
               children: [
-                Positioned(child: Image.asset('assets/images/Covers.png', width: 100, height: 100, scale: 0.5)),
+                Positioned(child: i.metas.extra?['image'] ?? Image.asset('assets/images/Covers.png', width: 100, height: 100, scale: 0.5)),
                 Positioned(
                   bottom: -70,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(i.path.split('/')[2], textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 24, fontWeight: FontWeight.w700)),
-                      Text(artist, textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF8995B8), fontSize: 16, fontWeight: FontWeight.w400)),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.65,
+                        child: Text(i.metas.title ?? 'Title', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 20, fontWeight: FontWeight.w700)),
+                      ),
+                      Text(i.metas.artist ?? 'Unknown', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF8995B8), fontSize: 16, fontWeight: FontWeight.w400)),
                     ],
                   ),
                 ),

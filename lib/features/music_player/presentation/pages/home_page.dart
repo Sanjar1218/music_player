@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/list_card.dart';
+import '../widgets/playlist_card.dart';
 import 'settings_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,10 +17,18 @@ class HomePage extends StatelessWidget {
       ),
       body: ListCards(
         title: 'Your Playlists',
-        imgPath: 'assets/images/Covers.png',
         onTap: () {
           Navigator.pushNamed(context, '/playlist');
         },
+        children: [
+          PlaylistCard(
+            title: 'Shortwave',
+            imgPath: Image.asset('assets/images/Shortwave.png'),
+            onTap: () {
+              Navigator.pushNamed(context, '/playlist');
+            },
+          ),
+        ],
       ),
     );
   }

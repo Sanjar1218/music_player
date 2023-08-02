@@ -22,9 +22,6 @@ class _PlayingPageState extends State<PlayingPage> {
   final assetsAudioPlayer = AssetsAudioPlayer();
   final CarouselController carouselController = CarouselController();
 
-  String artist = 'IMAGINE DRAGON';
-  String song = 'Believer';
-
   int second = 0;
   double range = 0;
   double wholeRange = 0;
@@ -35,7 +32,7 @@ class _PlayingPageState extends State<PlayingPage> {
   @override
   void initState() {
     assetsAudioPlayer.open(
-      Playlist(audios: widget.audios),
+      Playlist(audios: widget.audios, startIndex: widget.index ?? 0),
     );
 
     assetsAudioPlayer.currentPosition.listen(
@@ -67,10 +64,6 @@ class _PlayingPageState extends State<PlayingPage> {
       isPlaying = true;
       lastTime = ('${assetsAudioPlayer.current.value?.audio.duration.inMinutes.toString().padLeft(2, '0')}:${(assetsAudioPlayer.current.value!.audio.duration.inSeconds % 60).toString().padLeft(2, '0')}');
       wholeRange = assetsAudioPlayer.current.value!.audio.duration.inSeconds.toDouble();
-
-      setState(() {
-        song = event!.audio.assetAudioPath.split('/')[2];
-      });
     });
     super.initState();
   }
@@ -92,7 +85,7 @@ class _PlayingPageState extends State<PlayingPage> {
       body: Column(
         children: [
           const SizedBox(height: 30),
-          CarouselCustom(carouselController: carouselController, assetsAudioPlayer: assetsAudioPlayer, audios: widget.audios, artist: artist),
+          CarouselCustom(carouselController: carouselController, assetsAudioPlayer: assetsAudioPlayer, audios: widget.audios),
           const Padding(
             padding: EdgeInsets.only(top: 35, right: 30),
             child: Row(
