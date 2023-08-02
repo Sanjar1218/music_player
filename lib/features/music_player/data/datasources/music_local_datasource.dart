@@ -40,6 +40,11 @@ class MusicLocalDatasource {
     return playlists.where((element) => element.endsWith('.plt')).toList();
   }
 
+  // add playlist
+  Future<void> addPlaylist(String playlistName) async {
+    await sharedPreferences.setStringList(playlistName, []);
+  }
+
   // delete playlist
   Future<void> deletePlaylist(String playlistName) async {
     await sharedPreferences.remove(playlistName);

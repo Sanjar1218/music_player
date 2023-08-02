@@ -23,6 +23,10 @@ class MusicRepository {
     return await musicLocalDatasource.getPlaylists();
   }
 
+  Future<void> addPlaylist(String playlistName) async {
+    await musicLocalDatasource.addPlaylist(playlistName);
+  }
+
   Future<void> deletePlaylist(String playlistName) async {
     await musicLocalDatasource.deletePlaylist(playlistName);
   }
