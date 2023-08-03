@@ -1,8 +1,9 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:text_scroll/text_scroll.dart';
 
-class CarouselCustom extends StatelessWidget {
+class CarouselCustom extends StatefulWidget {
   const CarouselCustom({
     super.key,
     required this.carouselController,
@@ -15,19 +16,26 @@ class CarouselCustom extends StatelessWidget {
   final List<Audio>? audios;
 
   @override
+  State<CarouselCustom> createState() => _CarouselCustomState();
+}
+
+class _CarouselCustomState extends State<CarouselCustom> {
+  @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      carouselController: carouselController,
+      carouselController: widget.carouselController,
       options: CarouselOptions(
         height: 260.0,
         aspectRatio: 14 / 16,
         viewportFraction: 0.75,
         clipBehavior: Clip.none,
         onPageChanged: (index, reason) {
-          assetsAudioPlayer.playlistPlayAtIndex(index);
+          if (reason == CarouselPageChangedReason.manual) {
+            widget.assetsAudioPlayer.playlistPlayAtIndex(index);
+          }
         },
       ),
-      items: (audios ?? []).map((i) {
+      items: (widget.audios ?? []).map((i) {
         return Builder(
           builder: (BuildContext context) {
             return Stack(
@@ -42,10 +50,13 @@ class CarouselCustom extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.65,
-                        child: Text(i.metas.title ?? 'Title', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 20, fontWeight: FontWeight.w700)),
+                        width: MediaQuery.of(context).size.width * 0.50,
+                        child: TextScroll(i.metas.title ?? 'Title', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 20, fontWeight: FontWeight.w700)),
                       ),
-                      Text(i.metas.artist ?? 'Unknown', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF8995B8), fontSize: 16, fontWeight: FontWeight.w400)),
+                      SizedBox(
+                        width: 100,
+                        child: TextScroll(i.metas.artist ?? 'Unknown', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF8995B8), fontSize: 16, fontWeight: FontWeight.w400)),
+                      ),
                     ],
                   ),
                 ),

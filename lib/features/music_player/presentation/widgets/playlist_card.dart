@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class PlaylistCard extends StatelessWidget {
   final String title;
@@ -26,7 +27,10 @@ class PlaylistCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(title, style: const TextStyle(color: Color(0xFF081027), fontSize: 16, fontWeight: FontWeight.w700)),
+          SizedBox(
+            width: 150,
+            child: TextScroll(title, style: const TextStyle(color: Color(0xFF081027), fontSize: 16, fontWeight: FontWeight.w700)),
+          ),
         ],
       ),
     );
