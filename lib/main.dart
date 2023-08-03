@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'features/music_player/presentation/pages/home_page.dart';
 import 'features/music_player/presentation/pages/playing_page.dart';
+import 'features/music_player/presentation/providers/music_player_provider.dart';
 import 'features/music_player/presentation/providers/music_playlist_provider.dart';
 import 'injection_container.dart';
 
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => sl<MusicPlaylistProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => sl<MusicPlayingProvider>(),
         ),
       ],
       child: MaterialApp(

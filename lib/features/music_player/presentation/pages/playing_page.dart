@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/features/music_player/presentation/providers/music_player_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/carousel_slider.dart';
 
@@ -19,59 +20,10 @@ class PlayingPage extends StatefulWidget {
 }
 
 class _PlayingPageState extends State<PlayingPage> {
-  final assetsAudioPlayer = AssetsAudioPlayer();
-  final CarouselController carouselController = CarouselController();
-
-  int second = 0;
-  double range = 0;
-  double wholeRange = 0;
-  bool isPlaying = false;
-  String time = '--:--';
-  String lastTime = '--:--';
-
   @override
   void initState() {
-    assetsAudioPlayer.open(
-      Playlist(audios: widget.audios, startIndex: widget.index ?? 0),
-    );
-
-    assetsAudioPlayer.currentPosition.listen(
-      (event) {
-        if (event.inSeconds == second) return;
-        setState(() {
-          range = event.inSeconds.toDouble();
-          time = ('${event.inMinutes.toString().padLeft(2, '0')}:${(event.inSeconds % 60).toString().padLeft(2, '0')}');
-        });
-        second = event.inSeconds;
-      },
-      onDone: () {
-        setState(() {
-          range = 0;
-          time = '--:--';
-        });
-      },
-    );
-    assetsAudioPlayer.playlistFinished.listen((event) {
-      if (event) {
-        setState(() {
-          range = 0;
-          isPlaying = false;
-          time = '00:00';
-        });
-      }
-    });
-    assetsAudioPlayer.current.listen((event) {
-      isPlaying = true;
-      lastTime = ('${assetsAudioPlayer.current.value?.audio.duration.inMinutes.toString().padLeft(2, '0')}:${(assetsAudioPlayer.current.value!.audio.duration.inSeconds % 60).toString().padLeft(2, '0')}');
-      wholeRange = assetsAudioPlayer.current.value!.audio.duration.inSeconds.toDouble();
-    });
+    Provider.of<MusicPlayingProvider>(context, listen: false).init(widget.audios, index: widget.index);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    assetsAudioPlayer.dispose();
-    super.dispose();
   }
 
   @override
@@ -82,83 +34,67 @@ class _PlayingPageState extends State<PlayingPage> {
         title: const Text('Playing', style: TextStyle(color: Color(0xFF091227), fontSize: 20, fontWeight: FontWeight.w700)),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 30),
-          CarouselCustom(carouselController: carouselController, assetsAudioPlayer: assetsAudioPlayer, audios: widget.audios),
-          const Padding(
-            padding: EdgeInsets.only(top: 35, right: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Icon(Icons.favorite_outline),
-              ],
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(30.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(Icons.volume_mute_sharp),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.repeat),
-                    SizedBox(width: 20),
-                    Icon(Icons.shuffle),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text(time), Text(lastTime)],
-            ),
-          ),
-          Slider(
-            value: range,
-            max: wholeRange,
-            activeColor: Colors.black,
-            inactiveColor: Colors.grey,
-            thumbColor: Colors.black,
-            overlayColor: const MaterialStatePropertyAll(Colors.transparent),
-            onChanged: sliderValue,
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Consumer<MusicPlayingProvider>(
+        builder: (context, playing, child) {
+          return Column(
             children: [
-              InkWell(onTap: previousPage, child: const Icon(Icons.skip_previous_outlined, size: 60)),
-              InkWell(onTap: playOrPause, child: isPlaying ? const Icon(Icons.pause_outlined, size: 60) : const Icon(Icons.play_arrow_outlined, size: 60)),
-              InkWell(onTap: nextPage, child: const Icon(Icons.skip_next_outlined, size: 60)),
+              const SizedBox(height: 30),
+              CarouselCustom(carouselController: playing.carouselController, assetsAudioPlayer: playing.assetsAudioPlayer, audios: widget.audios),
+              const Padding(
+                padding: EdgeInsets.only(top: 35, right: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(Icons.favorite_outline),
+                  ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.volume_mute_sharp),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.repeat),
+                        SizedBox(width: 20),
+                        Icon(Icons.shuffle),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text(playing.time), Text(playing.lastTime)],
+                ),
+              ),
+              Slider(
+                value: playing.range,
+                max: playing.wholeRange,
+                activeColor: Colors.black,
+                inactiveColor: Colors.grey,
+                thumbColor: Colors.black,
+                overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+                onChanged: playing.sliderValue,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(onTap: playing.previousPage, child: const Icon(Icons.skip_previous_outlined, size: 60)),
+                  InkWell(onTap: playing.playOrPause, child: playing.isPlaying ? const Icon(Icons.pause_outlined, size: 60) : const Icon(Icons.play_arrow_outlined, size: 60)),
+                  InkWell(onTap: playing.nextPage, child: const Icon(Icons.skip_next_outlined, size: 60)),
+                ],
+              )
             ],
-          )
-        ],
+          );
+        },
       ),
     );
-  }
-
-  sliderValue(value) {
-    setState(() => range = value);
-    assetsAudioPlayer.seek(Duration(seconds: value.toInt()));
-  }
-
-  previousPage() {
-    assetsAudioPlayer.previous();
-    carouselController.previousPage();
-  }
-
-  playOrPause() {
-    assetsAudioPlayer.playOrPause();
-    setState(() => isPlaying = !isPlaying);
-  }
-
-  nextPage() {
-    assetsAudioPlayer.next();
-    carouselController.nextPage();
   }
 }
