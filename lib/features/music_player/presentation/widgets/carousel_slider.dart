@@ -25,9 +25,10 @@ class _CarouselCustomState extends State<CarouselCustom> {
     return CarouselSlider(
       carouselController: widget.carouselController,
       options: CarouselOptions(
+        enlargeCenterPage: true,
         height: 260.0,
-        aspectRatio: 14 / 16,
-        viewportFraction: 0.75,
+        aspectRatio: 16 / 15,
+        viewportFraction: 0.65,
         clipBehavior: Clip.none,
         onPageChanged: (index, reason) {
           if (reason == CarouselPageChangedReason.manual) {
@@ -51,7 +52,7 @@ class _CarouselCustomState extends State<CarouselCustom> {
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.50,
-                        child: TextScroll(i.metas.title ?? 'Title', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 20, fontWeight: FontWeight.w700)),
+                        child: TextScroll(i.metas.title ?? 'Title',  textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 20, fontWeight: FontWeight.w700)),
                       ),
                       SizedBox(
                         width: 100,

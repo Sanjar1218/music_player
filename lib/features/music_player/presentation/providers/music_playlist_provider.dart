@@ -34,7 +34,9 @@ class MusicPlaylistProvider with ChangeNotifier {
 
   void addList() {
     FilePicker.platform.getDirectoryPath().then((value) {
-      String value2 = value ?? '';
+      if (value == null) return;
+
+      String value2 = value;
       String name = value2.split('/').last;
       playlist.add(PlaylistModel(title: name, path: value2));
       musicRepository.addPlaylist(name, value2);
