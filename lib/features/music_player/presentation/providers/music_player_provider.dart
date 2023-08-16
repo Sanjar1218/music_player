@@ -18,6 +18,8 @@ class MusicPlayingProvider with ChangeNotifier {
   String time = '--:--';
   String lastTime = '--:--';
 
+  double volumeValue = 0.5;
+
   void init(List<Audio>? audios, {int? index}) {
     assetsAudioPlayer.open(
       Playlist(audios: audios, startIndex: index ?? 0),
@@ -51,27 +53,47 @@ class MusicPlayingProvider with ChangeNotifier {
       lastTime = ('${assetsAudioPlayer.current.value?.audio.duration.inMinutes.toString().padLeft(2, '0')}:${(assetsAudioPlayer.current.value!.audio.duration.inSeconds % 60).toString().padLeft(2, '0')}');
       wholeRange = assetsAudioPlayer.current.value!.audio.duration.inSeconds.toDouble();
     });
+
+    assetsAudioPlayer.volume.listen((event) {
+      volumeValue = event;
+      notifyListeners();
+    });
   }
 
-  sliderValue(value) {
+  void sliderValue(value) {
     range = value;
     notifyListeners();
     assetsAudioPlayer.seek(Duration(seconds: value.toInt()));
   }
 
-  previousPage() {
+  void previousPage() {
     assetsAudioPlayer.previous();
     carouselController.previousPage();
   }
 
-  playOrPause() {
+  void playOrPause() {
     assetsAudioPlayer.playOrPause();
     isPlaying = !isPlaying;
     notifyListeners();
   }
 
-  nextPage() {
+  void nextPage() {
     assetsAudioPlayer.next();
     carouselController.nextPage();
+  }
+
+  void volume(double value) {
+    assetsAudioPlayer.setVolume(value);
+    notifyListeners();
+  }
+
+  void loop() {
+    print('loop');
+    assetsAudioPlayer.toggleLoop();
+  }
+
+  void shuffle() {
+    print('shuffle');
+    assetsAudioPlayer.toggleShuffle();
   }
 }

@@ -20,6 +20,8 @@ class PlayingPage extends StatefulWidget {
 }
 
 class _PlayingPageState extends State<PlayingPage> {
+  bool volume = false;
+
   @override
   void initState() {
     Provider.of<MusicPlayingProvider>(context, listen: false).init(widget.audios, index: widget.index);
@@ -49,18 +51,49 @@ class _PlayingPageState extends State<PlayingPage> {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(30.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.volume_mute_sharp),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              volume = !volume;
+                            });
+                          },
+                          icon: const Icon(Icons.volume_mute_sharp),
+                        ),
+                        Positioned(
+                          top: 10,
+                          child: Visibility(
+                            visible: volume,
+                            child: Slider(
+                              value: playing.volumeValue,
+                              onChanged: playing.volume,
+                              activeColor: Colors.black,
+                              inactiveColor: Colors.grey,
+                              thumbColor: Colors.black,
+                              overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.repeat),
-                        SizedBox(width: 20),
-                        Icon(Icons.shuffle),
+                        IconButton(
+                          onPressed: playing.loop,
+                          icon: Container(
+                            color: Colors.grey,
+                            child: const Icon(Icons.repeat),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        IconButton(onPressed: playing.shuffle, icon: const Icon(Icons.shuffle)),
                       ],
                     )
                   ],
@@ -87,7 +120,10 @@ class _PlayingPageState extends State<PlayingPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(onTap: playing.previousPage, child: const Icon(Icons.skip_previous_outlined, size: 60)),
-                  InkWell(onTap: playing.playOrPause, child: playing.isPlaying ? const Icon(Icons.pause_outlined, size: 60) : const Icon(Icons.play_arrow_outlined, size: 60)),
+                  InkWell(
+                    onTap: playing.playOrPause,
+                    child: playing.isPlaying ? const Icon(Icons.pause_outlined, size: 60) : const Icon(Icons.play_arrow_outlined, size: 60),
+                  ),
                   InkWell(onTap: playing.nextPage, child: const Icon(Icons.skip_next_outlined, size: 60)),
                 ],
               )

@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<MusicPlaylistProvider>(
       builder: (context, watch, child) {
-        return Scaffold(
+          return Scaffold(
           backgroundColor: Colors.white,
           drawer: const SettingsPage(),
           appBar: AppBar(
