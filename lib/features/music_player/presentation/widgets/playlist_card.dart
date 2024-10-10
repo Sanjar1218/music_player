@@ -50,21 +50,18 @@ class _PlaylistCardState extends State<PlaylistCard> {
               ),
             ],
           ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 10, spreadRadius: 3, offset: Offset(0, 10))],
-              ),
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.more_vert),
+          if (isLongPress)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 10, spreadRadius: 3, offset: Offset(0, 10))]),
+                child: IconButton(
+                  onPressed: onLongPress,
+                  icon: const Icon(Icons.more_vert),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

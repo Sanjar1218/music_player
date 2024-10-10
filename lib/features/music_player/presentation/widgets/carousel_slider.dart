@@ -11,7 +11,7 @@ class CarouselCustom extends StatefulWidget {
     required this.audios,
   });
 
-  final CarouselController carouselController;
+  final CarouselSliderController carouselController;
   final AssetsAudioPlayer assetsAudioPlayer;
   final List<Audio>? audios;
 
@@ -52,7 +52,7 @@ class _CarouselCustomState extends State<CarouselCustom> {
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.50,
-                        child: TextScroll(i.metas.title ?? 'Title',  textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 20, fontWeight: FontWeight.w700)),
+                        child: TextScroll(i.metas.title ?? 'Title', textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF081027), fontSize: 20, fontWeight: FontWeight.w700)),
                       ),
                       SizedBox(
                         width: 100,

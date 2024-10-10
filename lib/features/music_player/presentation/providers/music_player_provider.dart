@@ -1,10 +1,10 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class MusicPlayingProvider with ChangeNotifier {
   final AssetsAudioPlayer assetsAudioPlayer;
-  final CarouselController carouselController;
+  final CarouselSliderController carouselController;
 
   MusicPlayingProvider({
     required this.assetsAudioPlayer,

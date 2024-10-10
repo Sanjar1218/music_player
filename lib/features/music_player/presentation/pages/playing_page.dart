@@ -1,9 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide CarouselController;
 import 'package:music_player/features/music_player/presentation/providers/music_player_provider.dart';
+import 'package:music_player/features/music_player/presentation/widgets/carousel_slider.dart';
 import 'package:provider/provider.dart';
-
-import '../widgets/carousel_slider.dart';
 
 class PlayingPage extends StatefulWidget {
   final List<Audio>? audios;
@@ -41,7 +40,11 @@ class _PlayingPageState extends State<PlayingPage> {
           return Column(
             children: [
               const SizedBox(height: 30),
-              CarouselCustom(carouselController: playing.carouselController, assetsAudioPlayer: playing.assetsAudioPlayer, audios: widget.audios),
+              CarouselCustom(
+                carouselController: playing.carouselController,
+                assetsAudioPlayer: playing.assetsAudioPlayer,
+                audios: widget.audios,
+              ),
               const Padding(
                 padding: EdgeInsets.only(top: 35, right: 30),
                 child: Row(
@@ -76,7 +79,7 @@ class _PlayingPageState extends State<PlayingPage> {
                               activeColor: Colors.black,
                               inactiveColor: Colors.grey,
                               thumbColor: Colors.black,
-                              overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+                              overlayColor: const WidgetStatePropertyAll(Colors.transparent),
                             ),
                           ),
                         ),
@@ -85,6 +88,7 @@ class _PlayingPageState extends State<PlayingPage> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // TODO: Add loop and loop one
                         IconButton(
                           onPressed: playing.loop,
                           icon: Container(
@@ -93,6 +97,7 @@ class _PlayingPageState extends State<PlayingPage> {
                           ),
                         ),
                         const SizedBox(width: 20),
+                        // TODO: Add loop and shuffle
                         IconButton(onPressed: playing.shuffle, icon: const Icon(Icons.shuffle)),
                       ],
                     )

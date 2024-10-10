@@ -41,7 +41,7 @@ Future<void> init() async {
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
-  final carouselController = CarouselController();
+  final carouselController = CarouselSliderController();
   final assetsAudioPlayer = AssetsAudioPlayer();
 
   sl.registerLazySingleton(() => sharedPreferences);
