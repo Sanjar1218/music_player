@@ -12,8 +12,11 @@ class MusicRepository {
 
   Future<List<MusicModel>> fetchMusics() async {
     final localMusics = await musicApiClientLocal.fetchMusic();
-    final remoteMusics = await musicApiClientRemote.fetchMusic();
+    // final remoteMusics = await musicApiClientRemote.fetchMusic();
 
-    return [...localMusics, ...remoteMusics];
+    return [
+      ...localMusics,
+      // ...remoteMusics,
+    ];
   }
 }
