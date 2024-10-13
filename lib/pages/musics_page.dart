@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:music_player/core/get_files.dart';
 
@@ -13,8 +14,14 @@ class MusicsPage extends StatelessWidget {
       body: const Center(
         child: Text("Musics page"),
       ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: getFiles,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var lst = await getFiles();
+
+          for (var path in lst) {
+            print('Track Name: ${path.trackName}');
+          }
+        },
         child: Icon(Icons.music_note),
       ),
     );

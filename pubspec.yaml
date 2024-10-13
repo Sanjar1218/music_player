@@ -33,7 +33,9 @@ dependencies:
   filesystem_picker: ^4.1.0
   flutter:
     sdk: flutter
+  flutter_media_metadata: ^1.0.0+1
   just_audio: ^0.9.41
+  metadata_god: ^0.5.2+1
   on_audio_query_forked: ^2.9.1
   path_provider: ^2.1.4
   permission_handler: ^11.3.1
