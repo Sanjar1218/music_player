@@ -33,7 +33,9 @@ dependencies:
   filesystem_picker: ^4.1.0
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.6
   flutter_media_metadata: ^1.0.0+1
+  get_it: ^8.0.0
   just_audio: ^0.9.41
   metadata_god: ^0.5.2+1
   on_audio_query_forked: ^2.9.1
@@ -42,12 +44,6 @@ dependencies:
   shared_preferences: ^2.3.2
 
 dev_dependencies:
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
