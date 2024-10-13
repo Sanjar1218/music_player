@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:music_player/core/get_files.dart';
 
 class MusicsPage extends StatelessWidget {
   const MusicsPage({super.key});
@@ -15,13 +13,7 @@ class MusicsPage extends StatelessWidget {
         child: Text("Musics page"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var lst = await getFiles();
-
-          for (var path in lst) {
-            print('Track Name: ${path.trackName}');
-          }
-        },
+        onPressed: () async {},
         child: Icon(Icons.music_note),
       ),
     );
