@@ -9,7 +9,12 @@ class PlayingPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Playing', style: TextStyle(color: Color(0xFF091227), fontSize: 20, fontWeight: FontWeight.w700)),
+        title: const Text('Playing',
+            style: TextStyle(
+              color: Color(0xFF091227),
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            )),
         centerTitle: true,
       ),
       body: Column(
