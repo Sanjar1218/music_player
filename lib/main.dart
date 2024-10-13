@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/pages/musics_page.dart';
 
-import 'features/music_player/presentation/pages/home_page.dart';
-import 'features/music_player/presentation/pages/playing_page.dart';
-import 'features/music_player/presentation/pages/playlist_page.dart';
+import 'pages/playlist_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,22 +12,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Music Player',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: Colors.black),
-        ),
-      ),
-      routes: {
-        '/': (context) => const HomePage(),
-        '/playlist': (context) => const PlaylistPage(),
-        '/playing': (context) => const PlayingPage(),
-      },
+    return const MaterialApp(
+      home: MusicsPage(),
     );
   }
 }
