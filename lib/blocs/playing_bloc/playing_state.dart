@@ -11,6 +11,17 @@ class PlayingLoaded extends PlayingState {
   });
 }
 
+class MusicPlaying extends PlayingState {
+  final Duration? duration;
+  final Duration? position;
+  final bool isPlaying;
+  MusicPlaying({
+    required this.duration,
+    required this.position,
+    required this.isPlaying,
+  });
+}
+
 class PlayingError extends PlayingState {
   final String message;
   PlayingError({

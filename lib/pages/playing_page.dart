@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:music_player/blocs/playing_bloc/playing_bloc.dart';
 import 'package:music_player/blocs/playing_bloc/playing_state.dart';
 import 'package:music_player/core/colors/text_colors.dart';
@@ -21,9 +22,6 @@ class _PlayingPageState extends State<PlayingPage> {
   @override
   void initState() {
     context.read<PlayingBloc>().getFile(widget.music);
-    context.read<PlayingBloc>().player.durationStream.listen((event) {
-      print(event);
-    });
     super.initState();
   }
 
@@ -39,36 +37,66 @@ class _PlayingPageState extends State<PlayingPage> {
       appBar: AppBar(
         title: const Text('Playing'),
       ),
-      body: BlocBuilder<PlayingBloc, PlayingState>(
-        builder: (context, state) {
-          if (state is PlayingLoaded) {
-            return Center(
-              child: Column(
-                children: [
-                  musicImage(context),
-                  const SizedBox(height: 16),
-                  musicTools(),
-                  Slider(
-                    value: 0.5,
-                    onChanged: (value) {},
-                    secondaryActiveColor: Colors.black,
-                    activeColor: Colors.black,
-                    thumbColor: Colors.black,
-                  ),
-                  playOrPause(context),
-                ],
-              ),
-            );
-          }
-          if (state is PlayingError) {
-            return Center(
-              child: Text(state.message),
-            );
-          }
-          return const Center(
-            child: Text('Playing page'),
-          );
-        },
+      body: Center(
+        child: Column(
+          children: [
+            musicImage(context),
+            const SizedBox(height: 16),
+            musicTools(),
+            const SizedBox(height: 16),
+            BlocBuilder<PlayingBloc, PlayingState>(
+              builder: (context, state) {
+                if (state is MusicPlaying) {
+                  Duration dur = state.duration ?? const Duration(seconds: 1);
+                  Duration pos = state.position ?? const Duration(seconds: 0);
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${pos.inMinutes}:${pos.inSeconds.remainder(60)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: TextColors.secondary,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '${dur.inMinutes}:${dur.inSeconds.remainder(60)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: TextColors.secondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Slider(
+                        value: pos.inSeconds.toDouble(),
+                        min: 0,
+                        max: dur.inSeconds.toDouble(),
+                        onChanged: (value) {
+                          context.read<PlayingBloc>().seek(
+                                Duration(
+                                  seconds: value.toInt(),
+                                ),
+                              );
+                        },
+                        secondaryActiveColor: Colors.black,
+                        activeColor: Colors.black,
+                        thumbColor: Colors.black,
+                      ),
+                    ],
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
+            playOrPause(context),
+          ],
+        ),
       ),
     );
   }
@@ -157,7 +185,9 @@ class _PlayingPageState extends State<PlayingPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.read<PlayingBloc>().setLoopMode(LoopMode.one);
+                },
                 icon: const Icon(
                   Icons.loop,
                   size: 40,

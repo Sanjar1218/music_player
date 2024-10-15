@@ -17,6 +17,22 @@ class PlayingBloc extends Cubit<PlayingState> {
     } else {
       emit(PlayingError(message: 'File not found'));
     }
+
+    player.durationStream.listen((event) {
+      emit(MusicPlaying(
+        duration: event,
+        position: player.position,
+        isPlaying: player.playing,
+      ));
+    });
+
+    player.positionStream.listen((event) {
+      emit(MusicPlaying(
+        duration: player.duration,
+        position: event,
+        isPlaying: player.playing,
+      ));
+    });
   }
 
   void play() {
@@ -34,5 +50,26 @@ class PlayingBloc extends Cubit<PlayingState> {
 
   void seek(Duration position) {
     player.seek(position);
+  }
+
+  void dispose() {
+    player.dispose();
+    super.close();
+  }
+
+  void setVolume(double volume) {
+    player.setVolume(volume);
+  }
+
+  void setSpeed(double speed) {
+    player.setSpeed(speed);
+  }
+
+  void setLoopMode(LoopMode loopMode) {
+    player.setLoopMode(loopMode);
+  }
+
+  void setShuffleModeEnabled(bool enabled) {
+    player.setShuffleModeEnabled(enabled);
   }
 }

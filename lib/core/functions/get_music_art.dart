@@ -23,6 +23,11 @@ class GetMusicArt extends StatelessWidget {
             height: height,
             fit: BoxFit.cover,
           )
-        : const Icon(Icons.music_note);
+        : Image.asset(
+            'assets/images/music.png',
+            width: width,
+            height: height,
+            fit: BoxFit.cover,
+          );
   }
 }
