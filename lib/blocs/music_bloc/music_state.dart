@@ -14,3 +14,4 @@ class MusicError extends MusicState {
   final String message;
   MusicError({required this.message});
 }
+
