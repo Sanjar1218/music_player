@@ -28,12 +28,6 @@ class _PlayingPageState extends State<PlayingPage> {
   }
 
   @override
-  void dispose() {
-    context.read<PlayingBloc>().player.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:music_player/core/functions/pare_integer.dart';
@@ -94,24 +95,25 @@ class MusicModel {
         filePath: metadata.filePath,
       );
 
-  factory MusicModel.fromJson(dynamic map) => MusicModel(
-        url: map['url'],
-        trackName: map['metadata']['trackName'],
-        trackArtistNames: map['metadata']['trackArtistNames']?.split('/'),
-        albumName: map['metadata']['albumName'],
-        albumArtistName: map['metadata']['albumArtistName'],
-        trackNumber: parseInteger(map['metadata']['trackNumber']),
-        albumLength: parseInteger(map['metadata']['albumLength']),
-        year: parseInteger(map['metadata']['year']),
-        genre: map['genre'],
-        authorName: map['metadata']['authorName'],
-        writerName: map['metadata']['writerName'],
-        discNumber: parseInteger(map['metadata']['discNumber']),
-        mimeType: map['metadata']['mimeType'],
-        trackDuration: parseInteger(map['metadata']['trackDuration']),
-        bitrate: parseInteger(map['metadata']['bitrate']),
-        albumArt: map['albumArt'],
-        filePath: map['filePath'],
+  // method to convert json to music model
+  factory MusicModel.fromJson(Map<String, dynamic> json) => MusicModel(
+        url: json['url'],
+        trackName: json['trackName'],
+        // trackArtistNames: List<String>.from(json['trackArtistNames']),
+        albumName: json['albumName'],
+        albumArtistName: json['albumArtistName'],
+        trackNumber: parseInteger(json['trackNumber']),
+        albumLength: parseInteger(json['albumLength']),
+        year: parseInteger(json['year']),
+        genre: json['genre'],
+        authorName: json['authorName'],
+        writerName: json['writerName'],
+        discNumber: parseInteger(json['discNumber']),
+        mimeType: json['mimeType'],
+        trackDuration: parseInteger(json['trackDuration']),
+        bitrate: parseInteger(json['bitrate']),
+        filePath: json['filePath'],
+        albumArt: base64.decode(json['albumArt'].toString().replaceAll('x', '')),
       );
 
   Map<String, dynamic> toJson() => {
@@ -131,6 +133,7 @@ class MusicModel {
         'trackDuration': trackDuration,
         'bitrate': bitrate,
         'filePath': filePath,
+        'albumArt':"x"+ base64.encode(albumArt ?? []) + "x",
       };
 
   @override

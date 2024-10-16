@@ -19,4 +19,14 @@ class MusicRepository {
       // ...remoteMusics,
     ];
   }
+
+  Future<List<MusicModel>> loadMusic() async {
+    final localMusics = await musicApiClientLocal.loadMusic();
+    // final remoteMusics = await musicApiClientRemote.loadMusic();
+
+    return [
+      ...localMusics,
+      // ...remoteMusics,
+    ];
+  }
 }

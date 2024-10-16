@@ -15,4 +15,13 @@ class MusicCubit extends Cubit<MusicState> {
       emit(MusicError(message: e.toString()));
     }
   }
+
+  void loadMusic() async {
+    print('mUsic loading');
+    try {
+      emit(Musicloaded(musics: await musicRepository.loadMusic()));
+    } catch (e) {
+      emit(MusicError(message: e.toString()));
+    }
+  }
 }
