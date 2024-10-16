@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:music_player/blocs/playing_bloc/playing_bloc.dart';
+import 'package:music_player/blocs/playing_bloc/playing_state.dart';
 import 'package:music_player/core/colors/text_colors.dart';
 import 'package:music_player/core/functions/get_music_art.dart';
 import 'package:music_player/models/music_model.dart';
 import 'package:music_player/pages/widgets/music_tools.dart';
 
 class PlayingPage extends StatefulWidget {
-  final MusicModel music;
+  final List<MusicModel> music;
+  final int index;
   const PlayingPage({
     super.key,
     required this.music,
+    required this.index,
   });
 
   @override
@@ -21,7 +23,7 @@ class PlayingPage extends StatefulWidget {
 class _PlayingPageState extends State<PlayingPage> {
   @override
   void initState() {
-    context.read<PlayingBloc>().getFile(widget.music);
+    context.read<PlayingBloc>().getFile(widget.music, widget.index);
     super.initState();
   }
 
@@ -33,9 +35,6 @@ class _PlayingPageState extends State<PlayingPage> {
 
   @override
   Widget build(BuildContext context) {
-    AudioPlayer state = context.read<PlayingBloc>().player;
-    Duration dur = state.duration ?? const Duration(seconds: 1);
-    Duration pos = state.position;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Playing'),
@@ -47,46 +46,63 @@ class _PlayingPageState extends State<PlayingPage> {
             const SizedBox(height: 16),
             MusicTools(context: context),
             const SizedBox(height: 16),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Row(
+            BlocBuilder<PlayingBloc, PlayingState>(
+              builder: (context, state) {
+                if (state is MusicPlaying) {
+                  Duration dur = state.duration ?? const Duration(seconds: 1);
+                  Duration pos = state.position ?? const Duration(seconds: 0);
+                  return Column(
                     children: [
-                      Text(
-                        '${pos.inMinutes}:${pos.inSeconds.remainder(60)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: TextColors.secondary,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${pos.inMinutes}:${pos.inSeconds.remainder(60)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: TextColors.secondary,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '${dur.inMinutes}:${dur.inSeconds.remainder(60)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: TextColors.secondary,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const Spacer(),
-                      Text(
-                        '${dur.inMinutes}:${dur.inSeconds.remainder(60)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: TextColors.secondary,
-                        ),
+                      Slider(
+                        value: pos.inSeconds.toDouble(),
+                        min: 0,
+                        max: dur.inSeconds.toDouble(),
+                        onChanged: (value) {
+                          context.read<PlayingBloc>().seek(
+                                Duration(
+                                  seconds: value.toInt(),
+                                ),
+                              );
+                        },
+                        secondaryActiveColor: Colors.black,
+                        activeColor: Colors.black,
+                        thumbColor: Colors.black,
                       ),
                     ],
-                  ),
-                ),
-                Slider(
-                  value: pos.inSeconds.toDouble(),
+                  );
+                }
+                return Slider(
+                  value: 0,
                   min: 0,
-                  max: dur.inSeconds.toDouble(),
-                  onChanged: (value) {
-                    context.read<PlayingBloc>().seek(
-                          Duration(
-                            seconds: value.toInt(),
-                          ),
-                        );
-                  },
+                  max: 1,
+                  onChanged: (value) {},
                   secondaryActiveColor: Colors.black,
                   activeColor: Colors.black,
                   thumbColor: Colors.black,
-                ),
-              ],
+                );
+              },
             ),
             playOrPause(context),
           ],
@@ -96,25 +112,26 @@ class _PlayingPageState extends State<PlayingPage> {
   }
 
   Column musicImage(BuildContext context) {
+    int index = context.read<PlayingBloc>().player.currentIndex ?? 0;
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: GetMusicArt(
-            albumArt: widget.music.albumArt,
+            albumArt: widget.music[index].albumArt,
             width: MediaQuery.of(context).size.width * 0.8,
             height: 400,
           ),
         ),
         Text(
-          widget.music.albumName ?? 'Unknown',
+          widget.music[index].albumName ?? 'Unknown',
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
-          widget.music.trackName ?? 'Unknown',
+          widget.music[index].trackName ?? 'Unknown',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
@@ -130,7 +147,12 @@ class _PlayingPageState extends State<PlayingPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<PlayingBloc>().previous();
+            setState(() {
+              
+            });
+          },
           icon: const Icon(
             Icons.skip_previous,
             size: 70,
@@ -152,7 +174,12 @@ class _PlayingPageState extends State<PlayingPage> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<PlayingBloc>().next();
+            setState(() {
+              
+            });
+          },
           icon: const Icon(
             Icons.skip_next,
             size: 70,

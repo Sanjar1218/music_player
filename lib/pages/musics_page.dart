@@ -16,7 +16,9 @@ class MusicsPage extends StatelessWidget {
       ),
       body: BlocBuilder<MusicCubit, MusicState>(
         builder: (context, state) {
+          
           if (state is Musicloaded) {
+
             return ListView.builder(
               itemCount: state.musics.length,
               itemBuilder: (context, index) {
@@ -26,7 +28,8 @@ class MusicsPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return PlayingPage(music: state.musics[index]);
+                          
+                          return PlayingPage(music: state.musics, index: index);
                         },
                       ),
                     );
