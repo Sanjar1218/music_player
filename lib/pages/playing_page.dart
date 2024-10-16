@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player/blocs/playing_bloc/playing_bloc.dart';
-import 'package:music_player/blocs/playing_bloc/playing_state.dart';
 import 'package:music_player/core/colors/text_colors.dart';
 import 'package:music_player/core/functions/get_music_art.dart';
 import 'package:music_player/models/music_model.dart';
+import 'package:music_player/pages/widgets/music_tools.dart';
 
 class PlayingPage extends StatefulWidget {
   final MusicModel music;
@@ -33,6 +33,9 @@ class _PlayingPageState extends State<PlayingPage> {
 
   @override
   Widget build(BuildContext context) {
+    AudioPlayer state = context.read<PlayingBloc>().player;
+    Duration dur = state.duration ?? const Duration(seconds: 1);
+    Duration pos = state.position;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Playing'),
@@ -42,57 +45,48 @@ class _PlayingPageState extends State<PlayingPage> {
           children: [
             musicImage(context),
             const SizedBox(height: 16),
-            musicTools(),
+            MusicTools(context: context),
             const SizedBox(height: 16),
-            BlocBuilder<PlayingBloc, PlayingState>(
-              builder: (context, state) {
-                if (state is MusicPlaying) {
-                  Duration dur = state.duration ?? const Duration(seconds: 1);
-                  Duration pos = state.position ?? const Duration(seconds: 0);
-                  return Column(
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              '${pos.inMinutes}:${pos.inSeconds.remainder(60)}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: TextColors.secondary,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              '${dur.inMinutes}:${dur.inSeconds.remainder(60)}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: TextColors.secondary,
-                              ),
-                            ),
-                          ],
+                      Text(
+                        '${pos.inMinutes}:${pos.inSeconds.remainder(60)}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: TextColors.secondary,
                         ),
                       ),
-                      Slider(
-                        value: pos.inSeconds.toDouble(),
-                        min: 0,
-                        max: dur.inSeconds.toDouble(),
-                        onChanged: (value) {
-                          context.read<PlayingBloc>().seek(
-                                Duration(
-                                  seconds: value.toInt(),
-                                ),
-                              );
-                        },
-                        secondaryActiveColor: Colors.black,
-                        activeColor: Colors.black,
-                        thumbColor: Colors.black,
+                      const Spacer(),
+                      Text(
+                        '${dur.inMinutes}:${dur.inSeconds.remainder(60)}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: TextColors.secondary,
+                        ),
                       ),
                     ],
-                  );
-                }
-                return const SizedBox();
-              },
+                  ),
+                ),
+                Slider(
+                  value: pos.inSeconds.toDouble(),
+                  min: 0,
+                  max: dur.inSeconds.toDouble(),
+                  onChanged: (value) {
+                    context.read<PlayingBloc>().seek(
+                          Duration(
+                            seconds: value.toInt(),
+                          ),
+                        );
+                  },
+                  secondaryActiveColor: Colors.black,
+                  activeColor: Colors.black,
+                  thumbColor: Colors.black,
+                ),
+              ],
             ),
             playOrPause(context),
           ],
@@ -165,45 +159,6 @@ class _PlayingPageState extends State<PlayingPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Padding musicTools() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.volume_mute,
-              size: 40,
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {
-                  context.read<PlayingBloc>().setLoopMode(LoopMode.one);
-                },
-                icon: const Icon(
-                  Icons.loop,
-                  size: 40,
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.shuffle,
-                  size: 40,
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
     );
   }
 }
