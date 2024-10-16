@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/blocs/playing_bloc/playing_bloc.dart';
 import 'package:music_player/blocs/playing_bloc/playing_state.dart';
 import 'package:music_player/core/colors/text_colors.dart';
-import 'package:music_player/core/functions/get_music_art.dart';
 import 'package:music_player/models/music_model.dart';
+import 'package:music_player/pages/widgets/music_images.dart';
 import 'package:music_player/pages/widgets/music_tools.dart';
 
 class PlayingPage extends StatefulWidget {
@@ -42,7 +42,7 @@ class _PlayingPageState extends State<PlayingPage> {
       body: Center(
         child: Column(
           children: [
-            musicImage(context),
+            MusicImage(music: widget.music),
             const SizedBox(height: 16),
             MusicTools(context: context),
             const SizedBox(height: 16),
@@ -111,37 +111,6 @@ class _PlayingPageState extends State<PlayingPage> {
     );
   }
 
-  Column musicImage(BuildContext context) {
-    int index = context.read<PlayingBloc>().player.currentIndex ?? 0;
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GetMusicArt(
-            albumArt: widget.music[index].albumArt,
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: 400,
-          ),
-        ),
-        Text(
-          widget.music[index].albumName ?? 'Unknown',
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          widget.music[index].trackName ?? 'Unknown',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: TextColors.secondary,
-          ),
-        ),
-      ],
-    );
-  }
-
   Row playOrPause(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -189,3 +158,4 @@ class _PlayingPageState extends State<PlayingPage> {
     );
   }
 }
+

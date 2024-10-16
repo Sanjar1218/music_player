@@ -11,14 +11,11 @@ class PlayingBloc extends Cubit<PlayingState> {
 
   void getFile(List<MusicModel> music, int index) {
     final playList = ConcatenatingAudioSource(
-      children: music
-          .map((e) => AudioSource.file(e.filePath!))
-          .toList(),
+      children: music.map((e) => AudioSource.file(e.filePath!)).toList(),
     );
-   
+
     player.setAudioSource(playList, initialIndex: index);
 
-    
     player.durationStream.listen((event) {
       emit(MusicPlaying(
         duration: event,
@@ -49,11 +46,19 @@ class PlayingBloc extends Cubit<PlayingState> {
   }
 
   void next() {
-    player.seekToNext();
+    if (player.hasNext) {
+      player.seekToNext();
+    } else {
+      player.seek(const Duration(seconds: 0), index: 0);
+    }
   }
 
   void previous() {
-    player.seekToPrevious();
+    if (player.hasPrevious) {
+      player.seekToPrevious();
+    } else {
+      player.seek(const Duration(seconds: 0), index: (player.effectiveIndices ?? [0]).last);
+    }
   }
 
   void seek(Duration position) {
