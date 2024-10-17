@@ -17,7 +17,6 @@ class MusicCubit extends Cubit<MusicState> {
   }
 
   void loadMusic() async {
-    print('mUsic loading');
     try {
       emit(Musicloaded(musics: await musicRepository.loadMusic()));
     } catch (e) {

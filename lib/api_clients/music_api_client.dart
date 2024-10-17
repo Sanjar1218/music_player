@@ -7,8 +7,9 @@ import 'package:music_player/core/functions/shared_prefs.dart';
 import 'package:music_player/models/music_model.dart';
 
 class MusicApiClientRemote {
-  Future<List<MusicModel>> fetchMusic(List<String> fielIds) async {
-    // TODO: Fetch music from local storage
+  Future<List<MusicModel>> fetchMusic() async {
+    List<String> fielIds = await SharedPrefs.getFileIds();
+
     for (String fileId in fielIds) {
       var response = await BotApi.getAudio(fileId: fileId);
       print(response.data);
@@ -16,20 +17,25 @@ class MusicApiClientRemote {
     return [];
   }
 
-  Future<List<String>> sendMusic(List<MusicModel> musicPaths) async {
+  Future<void> sendMusic(List<MusicModel> musicPaths) async {
     // Send music to remote storage
     List<String> fileIds = [];
+    print('sendMusic');
 
     for (MusicModel music in musicPaths) {
+      print('for loop');
       var response = await BotApi.sendAudio(
         chatId: 0,
         audio: music.filePath,
         caption: music.trackName,
       );
-
+      print('response');
+      print(response.data);
       fileIds.add(response.data['result']['audio']['file_id']);
     }
-    return [];
+    print('outside for loop');
+    // save fileIds using sharedpreferences
+    SharedPrefs.saveFielsIds(fileIds);
   }
 }
 
@@ -62,7 +68,6 @@ class MusicApiClientLocal {
 
   Future<List<MusicModel>> loadMusic() async {
     List<MusicModel> paths = await SharedPrefs.getMusics();
-    print(paths);
     return paths;
   }
 }

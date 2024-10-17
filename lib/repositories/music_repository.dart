@@ -10,6 +10,20 @@ class MusicRepository {
     required this.musicApiClientRemote,
   });
 
+  Future<void> uploadMusics(List<MusicModel> music) async {
+    await musicApiClientRemote.sendMusic(music);
+  }
+
+  Future<List<MusicModel>> downloadMusic() async {
+    final localMusics = await musicApiClientRemote.fetchMusic();
+    // final remoteMusics = await musicApiClientRemote.getMusic();
+
+    return [
+      ...localMusics,
+      // ...remoteMusics,
+    ];
+  }
+
   Future<List<MusicModel>> fetchMusics() async {
     final localMusics = await musicApiClientLocal.fetchMusic();
     // final remoteMusics = await musicApiClientRemote.fetchMusic();

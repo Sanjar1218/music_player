@@ -27,6 +27,9 @@ class BotApi {
     if (audio == null || caption == null) {
       throw Exception('Audio and caption must not be null');
     }
+    try{
+      print('sendAudio');
+      print(locator<Dio>().options.baseUrl);
     return locator<Dio>().post(
       'sendAudio',
       data: {
@@ -35,6 +38,12 @@ class BotApi {
         'caption': caption,
       },
     );
+
+    } catch(e){
+      print(e);
+    }
+
+    return Response(requestOptions: RequestOptions(path: ''));
   }
 
   static Future<Response> getAudio({

@@ -41,4 +41,25 @@ class SharedPrefs {
   static Future<void> saveBotToken(String token) async {
     await locator<SharedPreferences>().setString(botTokenKey, token);
   }
+
+  static Future<String?> getBotToken() async {
+    return locator<SharedPreferences>().getString(botTokenKey);
+  }
+
+  static Future<void> saveFielsIds(List<String> fileIds) async {
+    await locator<SharedPreferences>().setStringList("fileIds", fileIds);
+  }
+
+  static Future<List<String>> getFileIds() async {
+    List<String>? jsonString = locator<SharedPreferences>().getStringList("fileIds");
+    if (jsonString == null) {
+      return [];
+    }
+
+    List<String> fileIds = [];
+    for (String fileId in jsonString) {
+      fileIds.add(fileId);
+    }
+    return fileIds;
+  }
 }

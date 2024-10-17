@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/blocs/music_bloc/music_bloc.dart';
 import 'package:music_player/blocs/playing_bloc/playing_bloc.dart';
+import 'package:music_player/blocs/remote_bloc/remote_bloc.dart';
 import 'package:music_player/di.dart';
 import 'package:music_player/pages/musics_page.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  init();
+  await init();
   runApp(const App());
 }
 
@@ -33,6 +34,9 @@ class App extends StatelessWidget {
           create: (context) => locator(),
         ),
         BlocProvider<PlayingBloc>(
+          create: (context) => locator(),
+        ),
+        BlocProvider<RemoteBloc>(
           create: (context) => locator(),
         ),
       ],
