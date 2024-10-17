@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
   static String musicKey = "musics";
+  static String botTokenKey = "botToken";
 
   static Future<void> saveMusic(List<String> musics) async {
     String jsonString = jsonEncode(musics);
@@ -35,5 +36,9 @@ class SharedPrefs {
     } catch (e) {
       return [];
     }
+  }
+
+  static Future<void> saveBotToken(String token) async {
+    await locator<SharedPreferences>().setString(botTokenKey, token);
   }
 }

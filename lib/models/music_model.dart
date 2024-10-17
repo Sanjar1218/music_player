@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:music_player/core/functions/pare_integer.dart';
@@ -113,7 +112,7 @@ class MusicModel {
         trackDuration: parseInteger(json['trackDuration']),
         bitrate: parseInteger(json['bitrate']),
         filePath: json['filePath'],
-        albumArt: base64.decode(json['albumArt'].toString().replaceAll('x', '')),
+        albumArt: json['albumArt'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -133,7 +132,7 @@ class MusicModel {
         'trackDuration': trackDuration,
         'bitrate': bitrate,
         'filePath': filePath,
-        'albumArt':"x"+ base64.encode(albumArt ?? []) + "x",
+        'albumArt': albumArt,
       };
 
   @override

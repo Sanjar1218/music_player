@@ -2,12 +2,33 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_media_metadata/flutter_media_metadata.dart';
+import 'package:music_player/core/functions/bot_api.dart';
 import 'package:music_player/core/functions/shared_prefs.dart';
 import 'package:music_player/models/music_model.dart';
 
 class MusicApiClientRemote {
-  Future<List<MusicModel>> fetchMusic() async {
-    // Fetch music from local storage
+  Future<List<MusicModel>> fetchMusic(List<String> fielIds) async {
+    // TODO: Fetch music from local storage
+    for (String fileId in fielIds) {
+      var response = await BotApi.getAudio(fileId: fileId);
+      print(response.data);
+    }
+    return [];
+  }
+
+  Future<List<String>> sendMusic(List<MusicModel> musicPaths) async {
+    // Send music to remote storage
+    List<String> fileIds = [];
+
+    for (MusicModel music in musicPaths) {
+      var response = await BotApi.sendAudio(
+        chatId: 0,
+        audio: music.filePath,
+        caption: music.trackName,
+      );
+
+      fileIds.add(response.data['result']['audio']['file_id']);
+    }
     return [];
   }
 }

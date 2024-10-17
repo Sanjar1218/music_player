@@ -11,6 +11,17 @@ void main() {
   runApp(const App());
 }
 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MusicsPage(),
+    );
+  }
+}
+
 class App extends StatelessWidget {
   const App({super.key});
 
@@ -26,17 +37,6 @@ class App extends StatelessWidget {
         ),
       ],
       child: const MyApp(),
-    );
-  }
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MusicsPage(),
     );
   }
 }
