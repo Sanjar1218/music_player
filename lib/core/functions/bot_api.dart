@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:music_player/di.dart';
 
@@ -30,13 +32,15 @@ class BotApi {
     try{
       print('sendAudio');
       print(locator<Dio>().options.baseUrl);
-    return locator<Dio>().post(
-      'sendAudio',
-      data: {
+
+      FormData formData = FormData.fromMap({
         'chat_id': chatId,
         'audio': await MultipartFile.fromFile(audio),
         'caption': caption,
-      },
+      });
+    return locator<Dio>().post(
+      'sendAudio',
+      data: formData,
     );
 
     } catch(e){

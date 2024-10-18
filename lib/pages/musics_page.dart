@@ -7,6 +7,7 @@ import 'package:music_player/blocs/remote_bloc/remote_state.dart';
 import 'package:music_player/core/functions/get_music_art.dart';
 import 'package:music_player/models/music_model.dart';
 import 'package:music_player/pages/playing_page.dart';
+import 'package:music_player/pages/widgets/custom_drawer.dart';
 
 class MusicsPage extends StatefulWidget {
   const MusicsPage({super.key});
@@ -26,8 +27,10 @@ class _MusicsPageState extends State<MusicsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         title: const Text("Musics"),
+        
       ),
       body: BlocBuilder<MusicCubit, MusicState>(
         builder: (context, state) {
@@ -77,7 +80,8 @@ class _MusicsPageState extends State<MusicsPage> {
 class CustomDownloadButton extends StatefulWidget {
   final MusicModel music;
   const CustomDownloadButton({
-    super.key, required this.music,
+    super.key,
+    required this.music,
   });
 
   @override
@@ -85,23 +89,41 @@ class CustomDownloadButton extends StatefulWidget {
 }
 
 class _CustomDownloadButtonState extends State<CustomDownloadButton> {
+  bool isLoading = false;
+  bool isDownloaded = false;
+  bool isError = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RemoteBloc, RemoteState>(
       builder: (context, state) {
-        if (state is RemoteLoading) {
+        if (isError) {
+          return const Icon(Icons.error);
+        }
+        if (isLoading) {
           return const CircularProgressIndicator();
         }
-        if (state is RemoteLoaded) {
-          return IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.download),
-          );
+        if (isDownloaded) {
+          return const Icon(Icons.check);
         }
         return IconButton(
-          onPressed: () {
-            print("inside upload");
-            context.read<RemoteBloc>().uploadRemote(widget.music);
+          onPressed: ()async {
+            setState(() {
+              isLoading = true;
+            });
+           String? errorText = await context.read<RemoteBloc>().uploadRemote(widget.music);
+            if (errorText == null) {
+              setState(() {
+                isDownloaded = true;
+                isLoading = false;
+              });
+            } else {
+              setState(() {
+                isLoading = false;
+                isError = true;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorText)));
+            }
           },
           icon: const Icon(Icons.upload),
         );

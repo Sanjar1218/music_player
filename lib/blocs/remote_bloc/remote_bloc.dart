@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/blocs/remote_bloc/remote_state.dart';
 import 'package:music_player/models/music_model.dart';
@@ -16,13 +18,16 @@ class RemoteBloc extends Cubit<RemoteState> {
     }
   }
 
-  void uploadRemote(MusicModel music) async {
+  Future<String?> uploadRemote(MusicModel music) async {
     emit(RemoteLoading());
     try {
        await musicRepository.uploadMusics([music]);
       emit(RemoteLoaded(music: music));
+      return null;
     } catch (e) {
+      print(e);
       emit(RemoteError(message: e.toString()));
+      return e.toString();
     }
   }
 }

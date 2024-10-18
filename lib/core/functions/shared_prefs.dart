@@ -42,8 +42,16 @@ class SharedPrefs {
     await locator<SharedPreferences>().setString(botTokenKey, token);
   }
 
+  static Future<void> saveChatId(int chatId) async {
+    await locator<SharedPreferences>().setInt("chatId", chatId);
+  }
+
   static Future<String?> getBotToken() async {
     return locator<SharedPreferences>().getString(botTokenKey);
+  }
+
+  static Future<int?> getChatId() async {
+    return locator<SharedPreferences>().getInt("chatId");
   }
 
   static Future<void> saveFielsIds(List<String> fileIds) async {

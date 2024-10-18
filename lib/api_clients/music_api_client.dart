@@ -12,28 +12,24 @@ class MusicApiClientRemote {
 
     for (String fileId in fielIds) {
       var response = await BotApi.getAudio(fileId: fileId);
-      print(response.data);
     }
     return [];
   }
 
   Future<void> sendMusic(List<MusicModel> musicPaths) async {
+
+    int? chatId = await SharedPrefs.getChatId();
     // Send music to remote storage
     List<String> fileIds = [];
-    print('sendMusic');
 
     for (MusicModel music in musicPaths) {
-      print('for loop');
       var response = await BotApi.sendAudio(
-        chatId: 0,
+        chatId: chatId ?? 0,
         audio: music.filePath,
         caption: music.trackName,
       );
-      print('response');
-      print(response.data);
       fileIds.add(response.data['result']['audio']['file_id']);
     }
-    print('outside for loop');
     // save fileIds using sharedpreferences
     SharedPrefs.saveFielsIds(fileIds);
   }
