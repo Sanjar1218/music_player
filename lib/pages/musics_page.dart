@@ -62,6 +62,11 @@ class _MusicsPageState extends State<MusicsPage> {
               },
             );
           }
+          if (state is MusicError) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
           return const Center(
             child: Text("Musics page"),
           );

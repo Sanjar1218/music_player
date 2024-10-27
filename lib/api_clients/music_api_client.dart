@@ -5,6 +5,7 @@ import 'package:flutter_media_metadata/flutter_media_metadata.dart';
 import 'package:music_player/core/functions/bot_api.dart';
 import 'package:music_player/core/functions/shared_prefs.dart';
 import 'package:music_player/models/music_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MusicApiClientRemote {
   Future<List<MusicModel>> fetchMusic() async {
@@ -17,7 +18,6 @@ class MusicApiClientRemote {
   }
 
   Future<void> sendMusic(List<MusicModel> musicPaths) async {
-
     int? chatId = await SharedPrefs.getChatId();
     // Send music to remote storage
     List<String> fileIds = [];
@@ -36,12 +36,21 @@ class MusicApiClientRemote {
 }
 
 class MusicApiClientLocal {
-
   Future<List<MusicModel>> fetchMusic() async {
+    var permissionStatus = await Permission.storage.status;
+    print(permissionStatus);
+    // ask for permission to access storage
+    if (permissionStatus == PermissionStatus.denied) {
+      await Permission.manageExternalStorage.request();
+    }
+    print(permissionStatus);
     var path = await FilePicker.platform.getDirectoryPath();
 
     Directory directory = Directory(path ?? "");
-    List<FileSystemEntity> files = directory.listSync(recursive: true, followLinks: false);
+    print(directory.path);
+    List<FileSystemEntity> files = directory.listSync();
+    print(files.length);
+    print(files);
     List<String> filePaths = [];
     List<MusicModel> musics = [];
     for (FileSystemEntity file in files) {
