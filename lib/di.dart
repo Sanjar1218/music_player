@@ -12,7 +12,7 @@ GetIt locator = GetIt.instance;
 
 Future<void> init() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final Dio dio = Dio(
+  Dio dio() => Dio(
     BaseOptions(
       baseUrl: 'https://api.telegram.org/bot${prefs.getString('botToken')}/',
       headers: {
@@ -22,7 +22,7 @@ Future<void> init() async {
     ),
   );
 
-  locator.registerSingleton(dio);
+  locator.registerFactory(dio);
   locator.registerSingleton(prefs);
 
   locator.registerSingleton(AudioPlayer());

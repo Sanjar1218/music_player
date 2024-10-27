@@ -23,7 +23,7 @@ class MusicImage extends StatelessWidget {
           child: GetMusicArt(
             albumArt: music[index].albumArt,
             width: MediaQuery.of(context).size.width * 0.8,
-            height: 400,
+            height: 300,
           ),
         ),
         Text(
